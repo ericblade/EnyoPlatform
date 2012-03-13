@@ -1,3 +1,4 @@
 enyo.depends(
-    "EnyoPlatform.js"
+    "EnyoPlatform.js",
+    "PlatformSound.js"
 );

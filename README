@@ -5,6 +5,9 @@ so that it is loaded before any other code.  If you are using PhoneGap/Cordova, 
 start loading, you want to make sure not to call most of the functions in here until after the "deviceready" event
 is fired. Assumes presence of PhoneGap for Android and iOS functionality.
 
+You may also want to get the CrossApplicationEvents kind from
+https://github.com/MaKleSoft/enyo-plugins/tree/master/v1
+
 You do not need to instance the Platform Kind.
 
 Platform - basic platform determination and utility functions

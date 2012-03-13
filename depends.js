@@ -1,3 +1,3 @@
-enyo.depends({
+enyo.depends(
     "EnyoPlatform.js"
-});
+);

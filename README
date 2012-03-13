@@ -1,0 +1,50 @@
+Cross-platform detection and functionality encapsulation for EnyoJS (1.0).
+
+Include EnyoPlatform.js within your depends.js as any other source file. Preferably include it first,
+so that it is loaded before any other code.  If you are using PhoneGap/Cordova, and not waiting until "deviceready" to
+start loading, you want to make sure not to call most of the functions in here until after the "deviceready" event
+is fired. Assumes presence of PhoneGap for Android and iOS functionality.
+
+You do not need to instance the Platform Kind.
+
+Platform - basic platform determination and utility functions
+
+    Platform.getPlatformName() - return a string containing the name of the platform where available
+    Platform.isWebOS() - true if WebOS
+    Platform.isAndroid() - true if Android
+    Platform.isBlackBerry() - true if BlackBerry or WebWorks/BlackBerry
+    Platform.isiOS() - true if iOS
+    Platform.isMobile - true if not a "web" platform
+
+    Platform.hasFlash() - true if platform is known to likely carry Flash in it's WebViews
+    
+    Platform.isLargeScreen() - arbitrary value, I use px > 480 wide to assume we're on a tablet
+    Platform.isWideScreen() - true if screen is wider than tall (ie, Portrait mode)
+
+    Platform.hasBack() - true if platform is known to have a universal "Back" button or gesture
+    Platform.hasMenu() - true if platform is known to have a universal "Menu" button or gesture
+    Platform.useHTMLAudio() - true if platform is known to have a -FUNCTIONAL- HTML Audio implementation
+                              (Android 2 does NOT, I have not tested other Androids)
+    
+    Platform.browser(url, thisObj) - returns a function that can be called to launch a browser. Use such as:
+                                     Platform.browser("http://some.url", this)(); Make sure you call the function
+				     returned by this function.
+    Platform.getReviewURL() - return a URL formatted to fit the app store for whatever platform we are detected on.
+                              Currently supports WebOS, Android, BlackBerry PlayBook, iOS.
+			      Define additional variables in your appinfo.json as helpers:
+			      appWorldId: Your BlackBerry App World id in the URL from the dev portal
+			      iTunesAppId: Your iTunes App Id
+
+PlatformSound - overrides enyo.Sound to encapsulate the PhoneGap media API within it for use on platforms such as
+                Android 2 that do not properly support the HTML5 Audio API.  Instance this kind when needed, or
+		place it in your app's components where needed.
+
+    play() - start playback, restart playback if already playing
+    getCurrentPosition() - return current playback position
+    getDuration() - return loaded media duration
+    pause() - toggle pause state of playback
+    release() - completely destroy this component, and release any resources it was using in PhoneGap
+    seekTo(seconds) - jump to the specified playback position
+    stop() - completely stop playback
+
+

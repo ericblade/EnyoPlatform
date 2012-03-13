@@ -180,6 +180,7 @@ enyo.kind({
             else if(typeof PhoneGap !== "undefined" && window.plugins && window.plugins.childBrowser)
             {
                 /* If you have the popular childBrowser plugin for PhoneGap */
+				/* If you're using iOS, make sure you've called the childBrowser.init first somewhere!! */
                 return enyo.bind(thisObj, window.plugins.childBrowser.openExternal, url);
             }
             else if(this.platform == "android" && navigator.app && navigator.app.loadUrl)

@@ -249,15 +249,21 @@ enyo.kind({
     }
 });
 
-if(window.webkitNotifications)
+// experimental code that MIGHT work on an implementation where createHTMLNotification actually works.
+// PlayBook 2.0, however, is not that place.
+
+/* if(window.webkitNotifications)
 {
     enyo.windows.openDashboard = (function(path, name, params, attributes) {
+        enyo.log("openDashboard", path);
         if(window.webkitNotifications.checkPermission() == 0) {
+	    enyo.log("opening dashboard");
 	    var note = window.webkitNotifications.createHTMLNotification(path);
 	    attributes = attributes || {};
 	    attributes.window = "dashboard";
 	    note.enyo = note.enyo || {};
 	    note.enyo.windowParams = params || {};
+	    note.show();
 	}
     });
-}
+}*/

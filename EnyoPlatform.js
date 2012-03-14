@@ -248,3 +248,16 @@ enyo.kind({
         }
     }
 });
+
+if(window.webkitNotifications)
+{
+    enyo.windows.openDashboard = (function(path, name, params, attributes) {
+        if(window.webkitNotifications.checkPermission() == 0) {
+	    var note = window.webkitNotifications.createHTMLNotification(path);
+	    attributes = attributes || {};
+	    attributes.window = "dashboard";
+	    note.enyo = note.enyo || {};
+	    note.enyo.windowParams = params || {};
+	}
+    });
+}

@@ -34,6 +34,7 @@ enyo.kind({
             enyo.log("********* Setting up Platform Variables *************");
             enyo.log("window.PalmSystem "+ window.PalmSystem);
             enyo.log("window.blackberry "+ window.blackberry);
+			enyo.log("window.Cordova " + window.Cordova);
             enyo.log("window.PhoneGap "+ window.PhoneGap);
             enyo.log("window.device "+ window.device);
             if(window.device)
@@ -44,8 +45,8 @@ enyo.kind({
              * is initialized before calling this, we're going to ignore this
              * until the device var is available
              */
-            if(window.PhoneGap && !window.device) {
-                enyo.log("EnyoPlatform: PhoneGap detected, device not (yet) available. Bailing until next call.");
+            if( (window.Cordova || window.PhoneGap) && !window.device) {
+                enyo.log("EnyoPlatform: Cordova/PhoneGap detected, device not (yet) available. Bailing until next call.");
                 return;
             }
             /* Check for systems where we don't have PhoneGap in our
@@ -62,7 +63,7 @@ enyo.kind({
             }
             else if(typeof blackberry !== "undefined")
             {
-                if(typeof PhoneGap !== "undefined")
+                if(typeof (Cordova || PhoneGap) !== "undefined")
                 {
                     this.platform = "blackberry";
                 }
@@ -76,7 +77,7 @@ enyo.kind({
                  */
                 this.platformVersion = "unknown";
             }
-            else if(typeof PhoneGap !== "undefined")
+            else if(typeof (Cordova || PhoneGap) !== "undefined")
             {
                 /* See the PhoneGap Device API documentation for possible
                  * pitfalls.
@@ -177,7 +178,7 @@ enyo.kind({
                 var args = new blackberry.invoke.BrowserArguments(this.blackBerryURLEncode(url));
                 return enyo.bind(thisObj, blackberry.invoke.invoke, blackberry.invoke.APP_BROWSER, args);
             }
-            else if(typeof PhoneGap !== "undefined" && window.plugins && window.plugins.childBrowser)
+            else if(typeof (Cordova || PhoneGap) !== "undefined" && window.plugins && window.plugins.childBrowser)
             {
                 /* If you have the popular childBrowser plugin for PhoneGap */
 				/* If you're using iOS, make sure you've called the childBrowser.init first somewhere!! */

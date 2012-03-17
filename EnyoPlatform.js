@@ -60,13 +60,6 @@ enyo.kind({
                 var deviceInfo = enyo.fetchDeviceInfo();
                 this.platform = "webos";
                 this.platformVersion = deviceInfo ? parseFloat(deviceInfo.platformVersion) : "unknown";
-				if(this.platformVersion <= 2.24) /* parsing float doesn't give us the third digit, does it? hmm.. */
-				{
-					enyo.Dashboard.prototype.dbActivated = function() {
-						this.$.dashboardContent.$.topSwipeable.addClass("enyo-toolbar");
-						this.doDashboardActivated();
-					};
-				}
             }
             else if(typeof blackberry !== "undefined")
             {
@@ -275,3 +268,17 @@ enyo.kind({
 	}
     });
 }*/
+
+(function() {
+	if(window.PalmSystem)
+	{
+		var deviceInfo = enyo.fetchDeviceInfo();
+		if(parseFloat(deviceInfo.platformVersion) <= 2.2)
+		{
+			enyo.Dashboard.prototype.dbActivated = function() {
+				this.$.dashboardContent.$.topSwipeable.addClass("enyo-toolbar");
+				this.doDashboardActivated();
+			};
+		}
+	}
+})();

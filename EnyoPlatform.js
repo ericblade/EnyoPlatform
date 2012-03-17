@@ -276,7 +276,7 @@ enyo.kind({
 		if(parseFloat(deviceInfo.platformVersion) <= 2.2)
 		{
 			enyo.Dashboard.prototype.dbActivated = function() {
-				this.$.dashboardContent.$.topSwipeable.addClass("enyo-toolbar");
+				this.window.document.getElementsByTagName("body")[0].className = "enyo-toolbar";
 				this.doDashboardActivated();
 			};
 		}

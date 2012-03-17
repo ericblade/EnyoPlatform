@@ -60,6 +60,13 @@ enyo.kind({
                 var deviceInfo = enyo.fetchDeviceInfo();
                 this.platform = "webos";
                 this.platformVersion = deviceInfo ? parseFloat(deviceInfo.platformVersion) : "unknown";
+				if(this.platformVersion <= 2.24) /* parsing float doesn't give us the third digit, does it? hmm.. */
+				{
+					enyo.Dashboard.prototype.dbActivated = function() {
+						this.$.dashboardContent.$.topSwipeable.addClass("enyo-toolbar");
+						this.doDashboardActivated();
+					};
+				}
             }
             else if(typeof blackberry !== "undefined")
             {

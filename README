@@ -8,6 +8,10 @@ is fired. Assumes presence of PhoneGap for Android and iOS functionality.
 You may also want to get the CrossApplicationEvents kind from
 https://github.com/MaKleSoft/enyo-plugins/tree/master/v1
 
+There is also a "TextArea" kind that may be useful as a cross-platform replacement for the "RichText" kind in some
+cases available at http://forums.enyojs.com/discussion/63/textarea-kind-replacement-for-richtext - the RichText kind
+has severe problems on Android < 4, iOS < 5, PlayBook OS 2, and possibly others.
+
 You do not need to instance the Platform Kind.
 
 Platform - basic platform determination and utility functions

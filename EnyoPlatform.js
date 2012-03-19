@@ -63,7 +63,7 @@ enyo.kind({
             }
             else if(typeof blackberry !== "undefined")
             {
-                if(typeof (Cordova || PhoneGap) !== "undefined")
+                if(typeof Cordova !== "undefined" || typeof PhoneGap !== "undefined")
                 {
                     this.platform = "blackberry";
                 }
@@ -77,7 +77,7 @@ enyo.kind({
                  */
                 this.platformVersion = "unknown";
             }
-            else if(typeof (Cordova || PhoneGap) !== "undefined")
+            else if(typeof Cordova !== "undefined" || typeof PhoneGap !== "undefined")
             {
                 /* See the PhoneGap Device API documentation for possible
                  * pitfalls.
@@ -178,7 +178,7 @@ enyo.kind({
                 var args = new blackberry.invoke.BrowserArguments(this.blackBerryURLEncode(url));
                 return enyo.bind(thisObj, blackberry.invoke.invoke, blackberry.invoke.APP_BROWSER, args);
             }
-            else if(typeof (Cordova || PhoneGap) !== "undefined" && window.plugins && window.plugins.childBrowser)
+            else if(typeof Cordova !== "undefined" || typeof PhoneGap !== "undefined" && window.plugins && window.plugins.childBrowser)
             {
                 /* If you have the popular childBrowser plugin for PhoneGap */
 				/* If you're using iOS, make sure you've called the childBrowser.init first somewhere!! */

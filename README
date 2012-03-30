@@ -32,6 +32,7 @@ Platform - basic platform determination and utility functions
     Platform.hasMenu() - true if platform is known to have a universal "Menu" button or gesture
     Platform.useHTMLAudio() - true if platform is known to have a -FUNCTIONAL- HTML Audio implementation
                               (Android 2 does NOT, I have not tested other Androids)
+    Platform.postNotification() - see source code for Notification documentation. Not complete.			     
     
     Platform.browser(url, thisObj) - returns a function that can be called to launch a browser. Use such as:
                                      Platform.browser("http://some.url", this)(); Make sure you call the function

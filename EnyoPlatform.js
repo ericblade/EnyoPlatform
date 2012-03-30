@@ -147,6 +147,128 @@ enyo.kind({
             this.platform || this.setup(); 
             return this.isWebOS() || this.isWebWorks() || !this.isMobile();
         },
+		/* Used to post a notification message.  Supports webOS Enyo Dashboard,
+		 * webKitNotifications (Chrome/PlayBook), PhoneGap LocalNotifications
+		 * plugin
+		 * msgid = unique message id for message
+		 * (this needs to be modified to make replacement Dashboards in webOS when using duplicate msgid)
+		 * title = top line of text
+		 * subtext = second line of text
+		 * icon = icon to set for notification (webOS, Chrome - not supported in
+		 * 		  PlayBook OS 2.0, must configure in LocalNotifications plugin
+		 * 		  for Android)
+		 * smallIcon = icon to use for notification bar (webOS)
+		 * msgTapCallback = callback when message is tapped (webOS, Chrome), arg = dashProps
+		 * iconTapCallback = callback when icon is tapped (webOS), arg = dashProps
+		 * bannerMsg = banner to post (webOS)
+		 * alertSound = sound to play (webOS)
+		 */
+		postNotification: function(msgid, title, subtext, icon, smallIcon, msgTapCallback, iconTapCallback, bannerMsg, alertSound)
+		{
+			var wkn = window.webkitNotifications;
+			if(typeof msgid == "object")
+			{
+				title = msgid.title;
+				subtext = msgid.subtext;
+				icon = msgid.icon;
+				smallIcon = msgid.smallIcon;
+				msgTapCallack = msgid.msgTapCallback;
+				iconTapCallback = msgid.iconTapCallback;
+				bannerMsg = msgid.bannerMsg;
+				alertSound = msgid.alertSound;
+				msgid = msgid.msgid;
+			}
+			if(!this.NotificationDashboards)
+			{
+			    this.NotificationDashboards = { };
+			}
+			if(window.PalmSystem || (typeof plugins !== "undefined" && plugins.localNotification) )
+			{
+				this.actuallyPostNotification(msgid, title, subtext);
+			} else if(wkn) {
+				if(wkn.checkPermission()) { // 1 = Not Allowed, 2 = Denied, 0 = Allowed
+					wkn.requestPermission(enyo.bind(this, this.actuallyPostNotification, msgid, title, subtext));
+				} else {
+					this.actuallyPostNotification(msgid, title, subtext);
+				}
+			} 			
+		},
+		dashboardTap: function(inSender, dashProps)
+		{
+			if(inSender.msgTapCallback)
+			    inSender.msgTapCallback(dashProps);
+		},
+		dashboardIconTap: function(inSender, dashProps)
+		{
+			if(inSender.iconTapCallback)
+			    inSender.iconTapCallback(dashProps);
+		},
+		actuallyPostNotification: function(msgid, title, subtext, icon, smallIcon, msgTapCallback, iconTapCallback, bannerMsg, alertSound)
+		{
+			if(window.PalmSystem)
+			{
+				if(!this.NotificationDashboards[0])
+				{
+					this.NotificationDashboards[0] = this.createComponent( {
+						kind: "Dashboard",
+						"smallIcon": smallIcon,
+						"icon": icon,
+						onMessageTap: "dashboardTap",
+						onIconTap: "dashboardIconTap",
+					});
+				}
+				if(!this.NotificationDashboards[msgid]) {
+					this.NotificationDashboards[msgid] = { "icon": icon,
+															"smallIcon": smallIcon,
+															"title": title, "text": subtext,
+															id: msgid, "msgTapCallback": msgTapCallback,
+															"iconTapCallback": iconTapCallback };
+					this.NotificationDashboards[0].push(this.NotificationDashboards[msgid]);
+					if(bannerMsg)
+					    enyo.windows.addBannerMessage(bannerMsg, '{}', smallIcon, "", alertSound);
+				}
+				//this.NotificationDashboards[0].onLayerSwipe = "dashboardLayerSwipe";
+				//this.NotificationDashboards[0].onUserClose = "dashboardClosed";
+			} else if(window.webkitNotifications) {
+				var wkn = window.webkitNotifications;
+				if(wkn.checkPermission() === 0) // 0 = Allowed, 1 = Not Allowed, 2 = Denied
+				{
+					if(!this.NotificationDashboards[msgid]) {
+						try {
+							var note = wkn.createNotification(icon, title, subtext);
+							note.id = msgid;							
+							//note.onclose = enyo.bind(this, this.dashboardLayerSwipe, note, note);
+							note.onclick = enyo.bind(this, function() { msgTapCallback(); });
+							note.ondisplay = enyo.bind(this, function() { /* should play alert sound here but doesn't work on PlayBook */ });
+							note.onerror = enyo.bind(this, function() { enyo.log("webkitnotification onerror"); });							
+							note.show();
+							this.NotificationDashboards[0] = "temp holder";
+							this.NotificationDashboards[msgid] = note;
+						} catch(err) { // throw security error
+							enyo.log("error posting notification:" + err);
+						}
+					} else {
+						enyo.log("duplicate notification");
+					}
+				}
+			} else if(typeof plugins !== "undefined" && plugins.localNotification) {
+				this.NotificationDashboards[0] = "temp holder";
+				if(!this.NotificationDashboards[msgid]) {
+					this.NotificationDashboards[msgid] = 1;
+					plugins.localNotification.add({
+						date: new Date(),
+						message: title + "\r\n" + subtext,
+						//ticker: "Hmm.. what does the ticker line do?  I wonder.  Maybe I should read the documentation.",
+						repeatDaily: false,
+						id: msgid
+					});
+				}
+			}
+			else 
+			{
+				enyo.log("No known notification system");
+			}			
+		},
         /* Platform Specific Web Browser -- returns a function that should
          * launch the OS's web browser.  
          * call: Platform.browser("http://www.google.com/", this)();

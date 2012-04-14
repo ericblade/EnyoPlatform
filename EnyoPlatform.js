@@ -279,7 +279,7 @@ enyo.kind({
             if(this.isWebOS())
             {
                 return enyo.bind(thisObj, (function(args) {
-                    var x = thisObj.createComponent({ name: "AppManService", kind: "PalmService", service: "palm://com.palm.applicationManager/", method: "open" });
+                    var x = thisObj.createComponent({ kind: "PalmService", service: "palm://com.palm.applicationManager/", method: "open" });
                     x.call({ target: url });
                 }));
             }

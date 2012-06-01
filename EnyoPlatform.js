@@ -366,6 +366,10 @@ enyo.kind({
                 case "iphone":
                     url = "itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id="+appInfo.iTunesAppId;
                     break;
+				default:
+					if(typeof chrome !== "undefined")
+					    url = "https://chrome.google.com/webstore/detail/" + appInfo.chromeAppId + "/reviews";
+					break;
             }
             return url;
         }

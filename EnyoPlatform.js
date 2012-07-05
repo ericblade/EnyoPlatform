@@ -115,7 +115,7 @@ enyo.kind({
         },
         
         /* General screen size functions -- tablet vs phone, landscape vs portrait */
-        isLargeScreen: function() { return window.innerWidth > 480; },
+        isLargeScreen: function() { return window.innerWidth > 480 && window.innerHeight > 480; },
         isWideScreen: function() { return window.innerWidth > window.innerHeight; },
         
         /* Platform-supplied UI concerns */
